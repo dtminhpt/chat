@@ -11,10 +11,17 @@ import Parse
 
 class ChatViewController: UIViewController {
 
+    @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var messageTextField: UITextField!
+    
+    var messages:[PFObject] = [PFObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
+        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "onTimer", userInfo: nil, repeats: true)
 
         // Do any additional setup after loading the view.
     }
@@ -38,15 +45,40 @@ class ChatViewController: UIViewController {
 
     }
     
+    
 
-    /*
-    // MARK: - Navigation
+    func onTimer() {
+        var query = PFQuery(className:"Message")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            if let error = error {
+                // There was an error
+            } else {
+                // objects has all the Posts the current user liked.
+//                for obj in objects! {
+//                    print(obj)
+//                }
+                
+                self.messages = objects!
+                
+                self.tableView.reloadData()
+            }
+        }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
 
+}
+
+extension ChatViewController:UITableViewDelegate, UITableViewDataSource {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("MessageTableViewCell", forIndexPath: indexPath)
+        
+        cell.textLabel!.text = self.messages[indexPath.row]["text"] as? String
+        
+        return cell
+    }
 }
