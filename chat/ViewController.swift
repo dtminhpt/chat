@@ -39,6 +39,7 @@ class ViewController: UIViewController {
             (user: PFUser?, error: NSError?) -> Void in
             if user != nil {
                 // Do stuff after successful login.
+                self.performSegueWithIdentifier("ChatViewController", sender: self)
             } else {
                 print(error!)
                 // The login failed. Check error to see why.
@@ -53,7 +54,7 @@ class ViewController: UIViewController {
         var user = PFUser()
         user.username = username
         user.password = password
-        user.email = "email@example.com"
+        user.email = "email1@example.com"
         // other fields can be set just like with PFObject
         user["phone"] = "415-392-0202"
         
