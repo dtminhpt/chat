@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         var user = PFUser()
         user.username = username
         user.password = password
-        user.email = "email1@example.com"
+        user.email = "email7@example.com"
         // other fields can be set just like with PFObject
         user["phone"] = "415-392-0202"
         
@@ -67,6 +67,9 @@ class ViewController: UIViewController {
                 // Show the errorString somewhere and let the user try again.
             } else {
                 // Hooray! Let them use the app now.
+                let chuoi = user.username! + " has signed up successfully"
+                let alertView = UIAlertView(title: "Notification", message: chuoi as String, delegate: nil, cancelButtonTitle: "Close")
+                alertView.show()
             }
         }
     }

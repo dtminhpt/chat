@@ -33,15 +33,18 @@ class ChatViewController: UIViewController {
     @IBAction func onSend(sender: AnyObject) {
         var gameScore = PFObject(className: "Message")
         gameScore["text"] = messageTextField.text
+        gameScore["user"] = PFUser.currentUser()
         gameScore.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
                 // The object has been saved.
                 print(gameScore["text"])
+                print(gameScore["user"])
             } else {
                 // There was a problem, check error.description
             }
         }
+        messageTextField.text = ""
 
     }
     
